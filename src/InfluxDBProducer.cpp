@@ -1,5 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <InfluxDBProducer.hpp>
 #include <InfluxDBFactory.h>
+
 
 //using namespace libtasmota;
 
@@ -27,7 +30,11 @@ void InfluxDBProducer::produce(const TasmotaDeviceInfo& device) {
 
     for (auto& command : device.getCommands()) {
         std::string value = device.getApi().getValueFromPath(command);
-        influxPoint = influxPoint.addField(conformString(command), value);
+        double dvalue = 0.0;
+        int n = sscanf(value.c_str(), "%lf", &dvalue);
+        if (n == 1) {
+            influxPoint = influxPoint.addField(conformString(command), dvalue);
+        }
         fprintf(stderr, "%s  %s  %s => %s\n", device.getModuleType().c_str(), device.getHostName().c_str(), command.c_str(), value.c_str());
     }
 

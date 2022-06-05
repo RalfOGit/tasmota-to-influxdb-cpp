@@ -107,6 +107,7 @@ int main(int argc, char** argv) {
             uint64_t time_delta = time_now - time_previous;
             if (device.addToPollTime(time_delta) == true) {
                 influx.produce(device);
+                influx.flush();
                 device.subtractFromPollTime(device.getPollInterval());
             }
         }

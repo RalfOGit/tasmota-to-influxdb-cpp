@@ -43,7 +43,7 @@ public:
 /**
  *  Platform neutral sleep method.
  */
-void sleep(uint32_t millis) {
+static void sleepMs(uint32_t millis) {
 #ifdef _WIN32
     Sleep(millis);
 #else
@@ -55,7 +55,7 @@ void sleep(uint32_t millis) {
 /**
  *  Platform neutral method to get a tick count provided in ms ticks; this is useful for timing purposes.
  */
-uint64_t getTickCountInMs(void) {  // return a tick counter with ms resolution
+static uint64_t getTickCountInMs(void) {  // return a tick counter with ms resolution
 #if 1
     std::chrono::steady_clock::duration time = std::chrono::steady_clock::now().time_since_epoch();  // this is not relative to the unix epoch(!)
     std::chrono::milliseconds time_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(time);
@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
             }
         }
         time_previous = time_now;
-        sleep(1000);
+        sleepMs(1000);
     }
 
     return 0;

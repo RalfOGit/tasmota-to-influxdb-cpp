@@ -12,6 +12,8 @@ protected:
     std::unique_ptr<influxdb::InfluxDB> influxDB;
     influxdb::Point                     influxPoint;
 
+    std::string conformString(const std::string& str);
+
 public:
 
     InfluxDBProducer(void);

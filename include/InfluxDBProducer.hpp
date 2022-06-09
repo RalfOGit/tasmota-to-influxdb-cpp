@@ -20,7 +20,7 @@ public:
     ~InfluxDBProducer(void);
 
     void flush(void);
-    void produce(const TasmotaDeviceInfo &device);
+    int produce(const TasmotaDeviceInfo &device);
 };
 
 #endif

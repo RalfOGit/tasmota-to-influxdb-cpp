@@ -23,7 +23,8 @@ void InfluxDBProducer::flush(void) {
 }
 
 
-void InfluxDBProducer::produce(const TasmotaDeviceInfo& device) {
+int InfluxDBProducer::produce(const TasmotaDeviceInfo& device) {
+    int num_points = 0;
 
     influxPoint.addTag("device", conformString(device.getModuleType()));
     influxPoint.addTag("serial", conformString(device.getHostName()));
@@ -31,16 +32,21 @@ void InfluxDBProducer::produce(const TasmotaDeviceInfo& device) {
     for (auto& command : device.getCommands()) {
         std::string value = device.getApi().getValueFromPath(command);
         double dvalue = 0.0;
-        int n = sscanf(value.c_str(), "%lf", &dvalue);
-        if (n == 1) {
+        if (sscanf(value.c_str(), "%lf", &dvalue) == 1) {
             influxPoint = influxPoint.addField(conformString(command), dvalue);
+            ++num_points;
         }
         fprintf(stderr, "%s  %s  %s => %s\n", device.getModuleType().c_str(), device.getHostName().c_str(), command.c_str(), value.c_str());
     }
 
     std::string name = influxPoint.getName();
-    influxDB.get()->write(std::move(influxPoint));
+    if (num_points > 0) {
+        influxDB.get()->write(std::move(influxPoint));
+        influxDB.get()->flushBuffer();
+    }
     influxPoint = influxdb::Point(name);
+
+    return num_points;
 }
 
 

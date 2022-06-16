@@ -4,9 +4,6 @@
 #include <InfluxDBFactory.h>
 
 
-//using namespace libtasmota;
-
-
 InfluxDBProducer::InfluxDBProducer(void) :
   //influxDB(influxdb::InfluxDBFactory::Get("udp://localhost:8094/?db=test")),
   //influxDB(influxdb::InfluxDBFactory::Get("http://localhost:8086/?db=test")),

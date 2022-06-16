@@ -2,8 +2,8 @@
 #define __INFLUXDBPRODUCER_HPP__
 
 #include <memory>               // for std::unique_ptr
-#include <InfluxDB.h>
 #include <TasmotaDeviceInfo.hpp>
+#include <InfluxDB.h>
 
 
 class InfluxDBProducer {

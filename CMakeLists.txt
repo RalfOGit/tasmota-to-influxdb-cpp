@@ -7,6 +7,10 @@ project(tasmota-to-influxdb-cpp
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(USE_CURL OFF CACHE BOOL "Enable curl dependency")
+set(USE_BOOST OFF CACHE BOOL "Enable boost dependency")
+
+
 # This CMake configuration assumes the following directory layout
 #
 # - tasmota-to-influxdb-cpp
@@ -15,7 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 # - libcurl (windows only; for linux it is installed in /usr/lib64)
 #   - include
 #   - lib
-# - influxdb-cxx
+# - influxdb-cxx-fork
 #   - include
 #   - lib
 #   - <relative install path>
@@ -49,7 +53,7 @@ message("RELATIVE_INSTALL_PATH ${RELATIVE_INSTALL_PATH}")
 set(INFLUX_DIR         "${CMAKE_SOURCE_DIR}/influxdb-cxx-fork")
 set(INFLUX_INCLUDE_DIR "${INFLUX_DIR}/include")
 set(INFLUX_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/${RELATIVE_BUILD_PATH}/lib")
-add_subdirectory(influxdb-cxx-fork)
+add_subdirectory(influxdb-cxx-fork EXCLUDE_FROM_ALL)
 
 # path definitions for libspeedwire (adapt to your needs)
 set(TASMOTA_DIR         "${CMAKE_SOURCE_DIR}/libtasmota")
@@ -78,7 +82,7 @@ if (MSVC)
 #target_link_libraries(${PROJECT_NAME} tasmota.lib InfluxDB.lib ${CURL_LIBRARY} ws2_32.lib Iphlpapi.lib)
 target_link_libraries(${PROJECT_NAME} tasmota.lib InfluxDB.lib ws2_32.lib Iphlpapi.lib)
 else()
-target_link_libraries(${PROJECT_NAME} libtasmota.a libInfluxDB.so)
+target_link_libraries(${PROJECT_NAME} libtasmota.a libInfluxDB.a)
 endif()
 
 set_target_properties(${PROJECT_NAME}
